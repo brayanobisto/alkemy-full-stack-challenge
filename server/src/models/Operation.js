@@ -57,8 +57,12 @@ module.exports = sequelize => {
       },
       category: {
         type: DataTypes.ENUM(...CATEGORIES),
-        default: 'varios',
+        allowNull: false,
+        defaultValue: 'varios',
         validate: {
+          notNull: {
+            msg: 'La categoría no puede ser nula',
+          },
           isIn: {
             args: [CATEGORIES],
             msg: `La categoría debe ser una de las siguientes: ${CATEGORIES.join(', ')}`,
