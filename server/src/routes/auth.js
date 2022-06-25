@@ -6,6 +6,6 @@ const { validateBody } = require('../middlewares/auth')
 
 router.post('/register', validateBody, authController.register)
 
-router.get('/login', validateBody, authController.login)
+router.post('/login', validateBody, authController.login)
 
 module.exports = router
