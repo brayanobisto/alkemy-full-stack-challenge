@@ -1,6 +1,7 @@
 const { body } = require('express-validator')
 
 const { CATEGORIES } = require('../constants')
+const errorHandler = require('./errorHandler')
 
 module.exports = {
   validateBody: (isUpdating = false) => {
@@ -23,10 +24,9 @@ module.exports = {
         .withMessage('La fecha debe ser una fecha valida'),
 
       body('category')
-        .notEmpty()
-        .withMessage('La categoria es requerida')
         .isIn(CATEGORIES)
-        .withMessage(`La categoría debe ser una de las siguientes: ${CATEGORIES.join(', ')}`),
+        .withMessage(`La categoría debe ser una de las siguientes: ${CATEGORIES.join(', ')}`)
+        .optional(),
     ]
 
     !isUpdating &&
@@ -37,6 +37,8 @@ module.exports = {
           .isIn(['ingreso', 'egreso'])
           .withMessage('El tipo debe ser ingreso o egreso')
       )
+
+    validations.push(errorHandler)
 
     return validations
   },
