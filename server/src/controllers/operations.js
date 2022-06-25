@@ -1,5 +1,3 @@
-const { validationResult } = require('express-validator')
-
 const { Operation } = require('../db.js')
 
 module.exports = {
@@ -12,12 +10,6 @@ module.exports = {
   },
 
   createOperation: (req, res, next) => {
-    const errors = validationResult(req)
-
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() })
-    }
-
     const { concept, amount, date, type, category } = req.body
 
     Operation.create({
@@ -34,12 +26,6 @@ module.exports = {
   },
 
   updateOperation: (req, res, next) => {
-    const errors = validationResult(req)
-
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() })
-    }
-
     const { concept, amount, date, category } = req.body
     const { id } = req.params
 
