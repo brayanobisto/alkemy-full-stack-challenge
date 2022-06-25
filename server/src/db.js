@@ -52,8 +52,8 @@ sequelize.models = Object.fromEntries(capsEntries)
 const { User, Operation } = sequelize.models
 
 // Aca vendrían las relaciones
-User.hasMany(Operation)
-Operation.belongsTo(User)
+User.hasMany(Operation, { foreignKey: 'user_id' })
+Operation.belongsTo(User, { foreignKey: 'user_id' })
 
 module.exports = {
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
