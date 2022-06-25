@@ -1,4 +1,5 @@
 const { body } = require('express-validator')
+const jwt = require('jsonwebtoken')
 
 const errorHandler = require('./errorHandler')
 
@@ -19,4 +20,21 @@ module.exports = {
 
     errorHandler,
   ],
+
+  verifyToken: (req, res, next) => {
+    let token = req.headers?.authorization || ''
+
+    if (token === '') return res.status(403).json({ errors: [{ message: 'No se ha enviado el token' }] })
+
+    token = token.substring(7)
+
+    try {
+      const decodedData = jwt.verify(token, process.env.JWT_SECRET)
+      req.user = decodedData
+
+      next()
+    } catch (error) {
+      res.status(401).json({ errors: [{ message: 'Token inválido' }] })
+    }
+  },
 }
