@@ -3,7 +3,7 @@ const router = Router()
 
 const operationsController = require('../controllers/operations')
 const { verifyToken } = require('../middlewares/auth')
-const { validateBody } = require('../middlewares/operation')
+const { validateBody } = require('../middlewares/operations')
 
 router.get('/', verifyToken, operationsController.getAllOperations)
 

@@ -30,6 +30,7 @@ module.exports = {
 
     try {
       const decodedData = jwt.verify(token, process.env.JWT_SECRET)
+
       req.user = decodedData
 
       next()
