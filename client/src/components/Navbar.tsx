@@ -9,7 +9,7 @@ export const Navbar: FC = () => {
 
   return (
     <nav className="shadow-lg bg-slate-200">
-      <ul className="flex font-medium gap-x-4">
+      <ul className="container flex mx-auto font-medium gap-x-4">
         <li className={isActive('/')}>
           <Link to="/">Inicio</Link>
         </li>
