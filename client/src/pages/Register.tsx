@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 
 export const Register: FC = () => {
   return (
-    <div className="flex flex-col justify-center h-screen p-8">
+    <div className="flex flex-col justify-center min-h-screen p-8">
       <h1 className="mb-4 text-2xl font-bold text-center">Crear cuenta</h1>
 
       <form className="self-center w-full max-w-sm p-6 mb-2 rounded-md shadow-md bg-slate-200">
@@ -49,7 +49,7 @@ export const Register: FC = () => {
         </button>
       </form>
 
-      <div className="flex self-center w-full max-w-sm gap-x-2">
+      <div className="flex self-center w-full max-w-sm gap-x-1">
         <p>¿Ya tienes una cuenta?</p>
         <Link to="/ingreso" className="text-blue-500 underline hover:text-blue-400">
           Inicia sesión
