@@ -43,7 +43,7 @@ export const Register: FC = () => {
 
         <button
           type="submit"
-          className="w-full px-4 py-2 font-medium text-white transition-colors duration-200 ease-in rounded-md bg-emerald-600 text-md hover:bg-emerald-700 hover:text-gray-50"
+          className="w-full px-4 py-2 font-medium text-white transition-colors duration-200 ease-in bg-blue-600 rounded-md text-md hover:bg-blue-700 hover:text-gray-50"
         >
           Registrarse
         </button>
@@ -51,7 +51,7 @@ export const Register: FC = () => {
 
       <div className="flex self-center w-full max-w-sm gap-x-2">
         <p>¿Ya tienes una cuenta?</p>
-        <Link to="/login" className="text-blue-500 underline hover:text-blue-400">
+        <Link to="/ingreso" className="text-blue-500 underline hover:text-blue-400">
           Inicia sesión
         </Link>
       </div>
