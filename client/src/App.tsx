@@ -5,8 +5,8 @@ function App(): JSX.Element {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route path="/" element={<Register />} />
-      <Route path="/" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/login" element={<Login />} />
     </Routes>
   )
 }
