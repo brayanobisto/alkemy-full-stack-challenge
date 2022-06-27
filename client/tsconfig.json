@@ -4,6 +4,10 @@
     "paths": {
       "@components": ["src/components"],
       "@pages": ["src/pages"],
+      "@interfaces": ["src/interfaces"],
+      "@contexts": ["src/contexts"],
+      "@services": ["src/services"],
+      "@hooks": ["src/hooks"],
       "@schemas": ["src/schemas"]
     },
     "target": "ESNext",
@@ -23,6 +27,6 @@
     "jsx": "react-jsx",
     "pretty": true
   },
-  "include": ["src"],
+  "include": ["src/**/*"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
