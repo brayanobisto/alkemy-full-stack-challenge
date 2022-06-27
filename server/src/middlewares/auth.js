@@ -24,7 +24,7 @@ module.exports = {
   verifyToken: (req, res, next) => {
     let token = req.headers?.authorization || ''
 
-    if (token === '') return res.status(403).json({ errors: [{ message: 'No se ha enviado el token' }] })
+    if (token === '') return res.status(403).json({ errors: [{ msg: 'No se ha enviado el token' }] })
 
     token = token.substring(7)
 
@@ -35,7 +35,7 @@ module.exports = {
 
       next()
     } catch (error) {
-      res.status(401).json({ errors: [{ message: 'Token inválido' }] })
+      res.status(401).json({ errors: [{ msg: 'Token inválido' }] })
     }
   },
 }
