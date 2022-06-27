@@ -13,3 +13,13 @@ export const login = async (email: string, password: string) => {
 
   return response.data
 }
+
+export const verifyToken = async (token: string) => {
+  const response = await axios.get<IUser>('/auth/verify-token', {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+
+  return response.data
+}

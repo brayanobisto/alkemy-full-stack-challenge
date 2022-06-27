@@ -1,5 +1,5 @@
 import type { FC, ReactNode } from 'react'
-import { useReducer } from 'react'
+import { useReducer, useEffect } from 'react'
 
 import { useNavigate } from 'react-router-dom'
 
@@ -12,11 +12,13 @@ export interface AuthState {
 }
 
 const AUTH_INITIAL_STATE: AuthState = {
-  user: null,
+  user: undefined,
 }
 
 export interface AuthActions {
   register: (email: string, password: string) => Promise<void>
+  login: (email: string, password: string) => Promise<void>
+  logout: () => void
 }
 
 interface AuthProviderProps {
@@ -27,22 +29,43 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, AUTH_INITIAL_STATE)
   const navigate = useNavigate()
 
-  // TODO: Verify if user is still logged in
-  // useEffect(() => {
-  //   const token = localStorage.getItem('token') || ''
-  //   if (token) {
+  useEffect(() => {
+    const token = localStorage.getItem('token') || ''
 
-  //     dispatch({ type: '@AUTH/LOGIN', payload: user })
-  //   }
-  // }, [])
+    if (token === '') return dispatch({ type: '@AUTH/LOGOUT' })
+
+    authService
+      .verifyToken(token)
+      .then(user => {
+        dispatch({ type: '@AUTH/LOGIN', payload: user })
+      })
+      .catch(() => {
+        logout()
+      })
+  }, [])
 
   // DEFINE THE ACTIONS USING THE DISPATCH FUNCTION HERE
   const register = (email: string, password: string): Promise<void> => {
     return authService.register(email, password).then(user => {
       localStorage.setItem('token', user.token)
       dispatch({ type: '@AUTH/REGISTER', payload: user })
-      navigate('/')
+      navigate('/', { replace: true })
     })
+  }
+
+  const login = (email: string, password: string): Promise<void> => {
+    return authService.login(email, password).then(user => {
+      localStorage.setItem('token', user.token)
+      dispatch({ type: '@AUTH/LOGIN', payload: user })
+      navigate('/', { replace: true })
+    })
+  }
+
+  const logout = (): void => {
+    localStorage.removeItem('token')
+
+    dispatch({ type: '@AUTH/LOGOUT' })
+    navigate('/ingreso', { replace: true })
   }
 
   return (
@@ -50,6 +73,8 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
       value={{
         ...state,
         register,
+        login,
+        logout,
       }}
     >
       {children}
