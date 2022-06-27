@@ -3,7 +3,8 @@
     "baseUrl": "./",
     "paths": {
       "@components": ["src/components"],
-      "@pages": ["src/pages"]
+      "@pages": ["src/pages"],
+      "@schemas": ["src/schemas"]
     },
     "target": "ESNext",
     "useDefineForClassFields": true,
