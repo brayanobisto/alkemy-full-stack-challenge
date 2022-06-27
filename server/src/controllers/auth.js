@@ -37,7 +37,7 @@ module.exports = {
       let user = await User.findOne({ where: { email } })
 
       if (user === null || !(await checkPassword(password, user?.password))) {
-        return res.status(401).json({ errors: [{ msg: 'Usuario o contraseña incorrectos' }] })
+        return res.status(401).json({ errors: [{ msg: 'Usuario o contraseña incorrectos', param: 'email' }] })
       }
 
       const token = jwt.sign({ userId: user.id, email }, process.env.JWT_SECRET)
@@ -46,6 +46,22 @@ module.exports = {
       user.token = token
 
       res.status(201).json(user)
+    } catch (error) {
+      next(error)
+    }
+  },
+
+  verifyLogin: async (req, res, next) => {
+    try {
+      const { userId, email, token } = req.user
+      const user = await User.findOne({ where: { id: userId, email } })
+
+      if (user === null) return res.status(401).json({ errors: [{ msg: 'Token inválido' }] })
+
+      delete user.password
+      user.token = token
+
+      res.status(200).json({ user })
     } catch (error) {
       next(error)
     }
