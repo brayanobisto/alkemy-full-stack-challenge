@@ -1,27 +1,30 @@
 import type { FC } from 'react'
+import { useState } from 'react'
 
-import { Link } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 
 import { useAuth } from '@hooks'
 import { authSchema } from '@schemas'
+import { FullScreenSpinner } from '@components'
 
-export interface IUserForm {
+export interface IRegisterForm {
   email: string
   password: string
   confirmPassword: string
 }
 
 export const Register: FC = () => {
-  const { register } = useAuth()
+  const { user, register } = useAuth()
+  const [loading, setLoading] = useState(false)
 
   const {
     register: registerInput,
     handleSubmit,
     setError,
     formState: { errors },
-  } = useForm<IUserForm>({
+  } = useForm<IRegisterForm>({
     defaultValues: {
       email: '',
       password: '',
@@ -30,18 +33,25 @@ export const Register: FC = () => {
     resolver: yupResolver(authSchema.register),
   })
 
-  const onSubmit = ({ email, password }: IUserForm) =>
-    register(email, password).catch(({ response }) => {
-      console.log(response)
-      const [error, ...errors] = response.data.errors
-      setError(error.param, { type: 'register', message: error.msg }, { shouldFocus: true })
+  const onSubmit = ({ email, password }: IRegisterForm) => {
+    setLoading(true)
 
-      // TODO:Add errors types
-      errors !== undefined &&
-        errors.forEach((error: any) => {
-          setError(error.param, { type: 'register', message: error.msg })
-        })
-    })
+    register(email, password)
+      .catch(({ response }) => {
+        const [error, ...errors] = response.data.errors
+        setError(error.param, { type: 'register', message: error.msg }, { shouldFocus: true })
+
+        // TODO:Add errors types
+        errors !== undefined &&
+          errors.forEach((error: any) => {
+            setError(error.param, { type: 'register', message: error.msg })
+          })
+      })
+      .finally(() => setLoading(false))
+  }
+
+  if (loading || user === undefined) return <FullScreenSpinner />
+  if (user !== null) return <Navigate to="/" replace />
 
   return (
     <div className="flex flex-col justify-center min-h-screen p-8">
@@ -59,7 +69,9 @@ export const Register: FC = () => {
             className="px-4 py-2 border border-gray-300 rounded-md outline-none"
             placeholder="Email"
           />
-          {errors.email && <span className="mt-1 text-xs text-justify text-rose-600">{errors.email.message}</span>}
+          {errors.email !== undefined && (
+            <span className="mt-1 text-xs text-justify text-rose-600">{errors.email.message}</span>
+          )}
         </div>
 
         <div className="flex flex-col mb-4">
@@ -70,7 +82,9 @@ export const Register: FC = () => {
             className="px-4 py-2 border border-gray-300 rounded-md outline-none"
             placeholder="Contraseña"
           />
-          {errors.password && <span className="mt-1 text-xs text-justify text-rose-600">{errors.password.message}</span>}
+          {errors.password !== undefined && (
+            <span className="mt-1 text-xs text-justify text-rose-600">{errors.password.message}</span>
+          )}
         </div>
 
         <div className="flex flex-col mb-4">
@@ -81,7 +95,7 @@ export const Register: FC = () => {
             className="px-4 py-2 border border-gray-300 rounded-md outline-none"
             placeholder="Confirmar contraseña"
           />
-          {errors.confirmPassword && (
+          {errors.confirmPassword !== undefined && (
             <span className="mt-1 text-xs text-justify text-rose-600">{errors.confirmPassword.message}</span>
           )}
         </div>

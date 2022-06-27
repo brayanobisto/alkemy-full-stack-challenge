@@ -1,7 +1,16 @@
-import { Navbar, OperationList } from '@components'
 import type { FC } from 'react'
 
+import { Navigate } from 'react-router-dom'
+
+import { useAuth } from '@hooks'
+import { FullScreenSpinner, Navbar, OperationList } from '@components'
+
 export const Home: FC = () => {
+  const { user } = useAuth()
+
+  if (user === undefined) return <FullScreenSpinner />
+  if (user === null) return <Navigate to="/ingreso" replace />
+
   return (
     <div className="min-h-screen">
       {/* Navbar */}
