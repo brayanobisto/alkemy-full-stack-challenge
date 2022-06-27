@@ -14,9 +14,9 @@ module.exports = {
 
     body('password')
       .notEmpty()
-      .withMessage('El password es requerido')
+      .withMessage('La contraseña es requerida')
       .isStrongPassword()
-      .withMessage('El password debe tener al menos 8 caracteres, 1 mayúscula, 1 minúscula, 1 número y un símbolo'),
+      .withMessage('La contraseña debe tener al menos 8 caracteres, 1 mayúscula, 1 minúscula, 1 número y un símbolo'),
 
     errorHandler,
   ],

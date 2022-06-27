@@ -18,7 +18,7 @@ module.exports = {
         },
       })
 
-      if (!created) return res.status(409).json({ errors: [{ msg: 'El usuario ya existe' }] })
+      if (!created) return res.status(409).json({ errors: [{ msg: 'El usuario ya existe', param: 'email' }] })
 
       const token = jwt.sign({ userId: user.id, email }, process.env.JWT_SECRET)
       user = user.toJSON()
