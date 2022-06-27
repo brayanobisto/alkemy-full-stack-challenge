@@ -2,6 +2,7 @@ import type { FC } from 'react'
 
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
+
 import { operationSchema } from '@schemas'
 
 interface Props {
@@ -10,9 +11,9 @@ interface Props {
   onClose: () => void
 }
 
-interface IFormInputs {
+interface IOperationForm {
   concept: string
-  amount: number | string
+  amount: number
   date: string
   type: string
   category: string
@@ -24,22 +25,23 @@ export const OperationModal: FC<Props> = ({ title, isOpen, onClose }) => {
     reset,
     handleSubmit,
     formState: { errors },
-  } = useForm<IFormInputs>({
+  } = useForm<IOperationForm>({
     defaultValues: {
       concept: '',
-      amount: '',
+      amount: '' as unknown as number,
       date: '',
       type: '',
       category: '',
     },
     resolver: yupResolver(operationSchema),
   })
+
   const handleClose = () => {
     reset()
     onClose()
   }
 
-  const onSubmit = (data: IFormInputs) => console.log(data)
+  const onSubmit = (data: IOperationForm) => console.log(data)
 
   if (!isOpen) return null
 
