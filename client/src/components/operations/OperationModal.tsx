@@ -4,6 +4,8 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 
 import { operationSchema } from '@schemas'
+import { useOperations } from '@hooks'
+import type { IOperationForm } from '@interfaces'
 
 interface Props {
   title: string
@@ -11,15 +13,9 @@ interface Props {
   onClose: () => void
 }
 
-interface IOperationForm {
-  concept: string
-  amount: number
-  date: string
-  type: string
-  category: string
-}
-
 export const OperationModal: FC<Props> = ({ title, isOpen, onClose }) => {
+  const { addOperation } = useOperations()
+
   const {
     register,
     reset,
@@ -41,7 +37,10 @@ export const OperationModal: FC<Props> = ({ title, isOpen, onClose }) => {
     onClose()
   }
 
-  const onSubmit = (data: IOperationForm) => console.log(data)
+  const onSubmit = (data: IOperationForm) => {
+    addOperation(data)
+    onClose()
+  }
 
   if (!isOpen) return null
 
