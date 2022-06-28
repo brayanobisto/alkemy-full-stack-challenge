@@ -1,4 +1,5 @@
 import { Routes, Route } from 'react-router-dom'
+
 import { Home, Operations, Login, Register } from '@pages'
 
 function App(): JSX.Element {
