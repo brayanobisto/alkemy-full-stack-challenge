@@ -1,9 +1,18 @@
 import type { FC } from 'react'
 import { useState } from 'react'
-import { Navbar, OperationModal } from '@components'
+
+import { Navigate } from 'react-router-dom'
+
+import { FullScreenSpinner, Navbar, OperationModal } from '@components'
+import { useAuth, useOperations } from '@hooks'
 
 export const Operations: FC = () => {
+  const { user } = useAuth()
+  const { isLoading, operations } = useOperations()
   const [modalIsOpen, setModalIsOpen] = useState(false)
+
+  if (isLoading || user === undefined) return <FullScreenSpinner />
+  if (user === null) return <Navigate to="/ingreso" replace />
 
   return (
     <div className="min-h-screen">
@@ -19,6 +28,12 @@ export const Operations: FC = () => {
           >
             Agregar
           </button>
+        </div>
+
+        <div className="flex flex-col mt-4">
+          {operations.map(operation => (
+            <div key={operation.id}>{operation.concept}</div>
+          ))}
         </div>
       </div>
     </div>
