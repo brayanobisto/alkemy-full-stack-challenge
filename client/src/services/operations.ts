@@ -25,3 +25,15 @@ export const addOperation = async (operation: IOperationForm): Promise<IOperatio
 
   return newOperation.data
 }
+
+export const updateOperation = async (id: number, operation: IOperationForm): Promise<IOperation> => {
+  const token = localStorage.getItem('token') || ''
+
+  const newOperation = await axios.put(`/operations/${id}`, operation, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+
+  return newOperation.data
+}
