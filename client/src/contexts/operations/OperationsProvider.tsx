@@ -40,6 +40,7 @@ export interface IOperationsActions {
   closeOperationModal: () => void
   addOperation: (operation: IOperationForm) => void
   updateOperation: (id: number, operation: IOperationForm) => void
+  deleteOperation: (id: number) => void
   setFilter: (filter: string, value: string) => void
   resetFilters: () => void
   resetState: () => void
@@ -114,6 +115,23 @@ export const OperationsProvider: FC<OperationsProviderProps> = ({ children }) =>
       })
   }
 
+  const deleteOperation = (id: number): void => {
+    dispatch({ type: '@OPERATIONS/SET_IS_LOADING' })
+
+    operationsService
+      .deleteOperation(id)
+      .then(() => {
+        dispatch({ type: '@OPERATIONS/DELETE_OPERATION', payload: id })
+        toast.success('Operación eliminada correctamente')
+      })
+      .catch(({ response }) => {
+        console.log(response)
+        const [error] = response.data.errors
+        dispatch({ type: '@OPERATIONS/SET_ERROR', payload: error.msg })
+        toast.error('No se pudo eliminar la operación')
+      })
+  }
+
   const setFilter = (filter: string, value: string): void => {
     dispatch({ type: '@OPERATIONS/SET_FILTER', payload: { [filter]: value } })
   }
@@ -135,6 +153,7 @@ export const OperationsProvider: FC<OperationsProviderProps> = ({ children }) =>
         closeOperationModal,
         addOperation,
         updateOperation,
+        deleteOperation,
         setFilter,
         resetState,
         resetFilters,

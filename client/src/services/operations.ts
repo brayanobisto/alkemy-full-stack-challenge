@@ -37,3 +37,15 @@ export const updateOperation = async (id: number, operation: IOperationForm): Pr
 
   return newOperation.data
 }
+
+export const deleteOperation = async (id: number): Promise<IOperation> => {
+  const token = localStorage.getItem('token') || ''
+
+  const newOperation = await axios.delete(`/operations/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+
+  return newOperation.data
+}

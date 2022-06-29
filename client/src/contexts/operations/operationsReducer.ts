@@ -7,6 +7,7 @@ type OperationsAction =
   | { type: '@OPERATIONS/CLOSE_OPERATION_MODAL' }
   | { type: '@OPERATIONS/ADD_OPERATION'; payload: IOperation }
   | { type: '@OPERATIONS/UPDATE_OPERATION'; payload: IOperation }
+  | { type: '@OPERATIONS/DELETE_OPERATION'; payload: number }
   | { type: '@OPERATIONS/SET_FILTER'; payload: { [key: string]: string } }
   | { type: '@OPERATIONS/RESET_FILTERS' }
   | { type: '@OPERATIONS/SET_IS_LOADING' }
@@ -31,6 +32,14 @@ export const operationsReducer = (state: IOperationsState, action: OperationsAct
       return {
         ...state,
         operations: state.operations.map(operation => (operation.id === action.payload.id ? action.payload : operation)),
+        error: null,
+        isLoading: false,
+      }
+
+    case '@OPERATIONS/DELETE_OPERATION':
+      return {
+        ...state,
+        operations: state.operations.filter(operation => operation.id !== action.payload),
         error: null,
         isLoading: false,
       }
