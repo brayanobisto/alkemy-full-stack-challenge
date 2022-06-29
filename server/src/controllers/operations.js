@@ -4,7 +4,7 @@ module.exports = {
   getAllOperations: (req, res, next) => {
     const { userId } = req.user
 
-    Operation.findAll({ where: { user_id: userId } })
+    Operation.findAll({ where: { user_id: userId }, order: [['createdAt', 'ASC']] })
       .then(operations => {
         res.status(200).json(operations)
       })
@@ -49,10 +49,10 @@ module.exports = {
         returning: true,
       }
     )
-      .then(([result, operation]) => {
+      .then(([result, operations]) => {
         if (result === 0) return res.status(404).json({ errors: [{ msg: `No se econtró la operación con el id ${id}` }] })
 
-        res.status(200).json(operation)
+        res.status(200).json(operations[0])
       })
       .catch(next)
   },
