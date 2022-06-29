@@ -1,10 +1,15 @@
 import type { FC } from 'react'
-import { useMemo } from 'react'
+import { useMemo, useEffect } from 'react'
 
 import { useOperations } from '@hooks'
+import { EditIcon, DeleteIcon } from '@components'
 
 export const OperationTable: FC = () => {
-  const { operations, filters, setFilter } = useOperations()
+  const { operations, filters, setFilter, resetFilters } = useOperations()
+
+  useEffect(() => {
+    return resetFilters
+  }, [])
 
   const filteredOperations = useMemo(
     () =>
@@ -14,9 +19,12 @@ export const OperationTable: FC = () => {
     [operations, filters]
   )
 
+  if (operations.length === 0)
+    return <h4 className="text-lg font-semibold text-center text-gray-400">No has registrado ninguna operación</h4>
+
   return (
     <div className="p-4">
-      <div className="overflow-x-auto rounded-lg shadow-md">
+      <div className="overflow-x-auto rounded-sm shadow-md">
         <table className="w-full text-sm">
           <thead className="text-xs uppercase bg-slate-200">
             <tr>
@@ -63,22 +71,33 @@ export const OperationTable: FC = () => {
                 </td>
               </tr>
             ) : (
-              filteredOperations.map(operation => (
-                <tr key={operation.id} className="border-t border-gray-500">
-                  <td role="cell" className="px-6 py-4 font-medium text-left whitespace-nowrap">
-                    {operation.concept}
-                  </td>
-                  <td role="cell" className="px-6 py-4 font-medium text-right whitespace-nowrap">
-                    {operation.amount}
-                  </td>
-                  <td role="cell" className="px-6 py-4 font-medium text-left whitespace-nowrap">
-                    {operation.category}
-                  </td>
-                  <td role="cell" className="px-6 py-4 font-medium text-left whitespace-nowrap">
-                    Editar / Eliminar
-                  </td>
-                </tr>
-              ))
+              filteredOperations.map(operation => {
+                const className = operation.type === 'ingreso' ? ' text-green-600' : ' text-red-600'
+                const amount = operation.type === 'ingreso' ? `+$${operation.amount}` : `-$${operation.amount}`
+
+                return (
+                  <tr key={operation.id} className="border-t border-gray-500">
+                    <td role="cell" className="p-4 font-medium text-left whitespace-nowrap">
+                      {operation.concept}
+                    </td>
+                    <td role="cell" className={`p-4 font-medium text-right whitespace-nowrap${className}`}>
+                      {amount}
+                    </td>
+                    <td role="cell" className="p-4 font-medium text-left whitespace-nowrap">
+                      {operation.category}
+                    </td>
+                    <td role="cell" className="flex items-center p-4 font-medium text-left whitespace-nowrap gap-x-4">
+                      <button type="button">
+                        <EditIcon className="fill-gray-800" />
+                      </button>
+
+                      <button type="button">
+                        <DeleteIcon className="fill-gray-800" />
+                      </button>
+                    </td>
+                  </tr>
+                )
+              })
             )}
           </tbody>
         </table>

@@ -16,7 +16,7 @@ export const OperationCard: FC<Props> = ({ operation }) => {
 
   return (
     <div className="flex flex-wrap justify-between p-4 rounded-md shadow-sm bg-slate-200">
-      <div>
+      <div className="overflow-hidden">
         <h3 className="text-xl font-medium">{operation.concept}</h3>
         <span className="font-mono">{operation.date.toLocaleString()}</span>
       </div>

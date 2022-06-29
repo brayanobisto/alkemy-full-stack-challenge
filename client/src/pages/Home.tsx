@@ -28,7 +28,7 @@ export const Home: FC = () => {
       <div className="container mx-auto">
         <div className="p-4 mt-4 text-center">
           <h1 className="mb-2 text-3xl font-bold">Balance actual</h1>
-          <p className="font-mono text-2xl font-semibold">{total < 0 ? `-$${Math.abs(total)}` : total}</p>
+          <p className="font-mono text-2xl font-semibold">{total < 0 ? `-$${Math.abs(total)}` : `$${total}`}</p>
         </div>
 
         <OperationList operations={lastTenOperations} />

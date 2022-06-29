@@ -7,7 +7,7 @@ export const operationSchema = yup
       .number()
       .typeError('Ingrese un monto válido')
       .min(1, 'El monto debe ser mayor a 0')
-      .max(99999999.99, "El monto debe ser menor a 100'000'000.00"),
+      .max(99999.99, "El monto debe ser menor a 100'000.00"),
     date: yup.string().required('La fecha es requerida'),
     type: yup.string().required('Seleccione el tipo de la operación').nullable(),
     category: yup.string().required('Seleccione una categoría'),

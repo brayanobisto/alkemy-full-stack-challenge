@@ -13,14 +13,14 @@ interface IOperationFilter {
   category: string
 }
 
-export interface OperationsState {
+export interface IOperationsState {
   operations: IOperation[]
   filters: IOperationFilter
   isLoading: boolean
   error: string | null
 }
 
-const OPERATIONS_INITIAL_STATE: OperationsState = {
+const OPERATIONS_INITIAL_STATE: IOperationsState = {
   operations: [],
   filters: {
     type: 'all',
@@ -30,10 +30,12 @@ const OPERATIONS_INITIAL_STATE: OperationsState = {
   error: null,
 }
 
-export interface OperationsActions {
+export interface IOperationsActions {
   getOperations: () => void
   addOperation: (operation: IOperationForm) => void
   setFilter: (filter: string, value: string) => void
+  resetFilters: () => void
+  resetState: () => void
 }
 
 interface OperationsProviderProps {
@@ -60,7 +62,7 @@ export const OperationsProvider: FC<OperationsProviderProps> = ({ children }) =>
     dispatch({ type: '@OPERATIONS/SET_IS_LOADING' })
     const operations = await operationsService.getOperations()
 
-    dispatch({ type: '@OPERATIONS/SET', payload: operations })
+    dispatch({ type: '@OPERATIONS/SET_OPERATIONS', payload: operations })
   }
 
   const addOperation = (operation: IOperationForm): void => {
@@ -69,7 +71,7 @@ export const OperationsProvider: FC<OperationsProviderProps> = ({ children }) =>
     operationsService
       .addOperation(operation)
       .then(operation => {
-        dispatch({ type: '@OPERATIONS/ADD', payload: operation })
+        dispatch({ type: '@OPERATIONS/ADD_OPERATION', payload: operation })
         toast.success('Operación creada correctamente')
       })
       .catch(({ response }) => {
@@ -84,6 +86,14 @@ export const OperationsProvider: FC<OperationsProviderProps> = ({ children }) =>
     dispatch({ type: '@OPERATIONS/SET_FILTER', payload: { [filter]: value } })
   }
 
+  const resetFilters = (): void => {
+    dispatch({ type: '@OPERATIONS/RESET_FILTERS' })
+  }
+
+  const resetState = (): void => {
+    dispatch({ type: '@OPERATIONS/RESET_STATE', payload: OPERATIONS_INITIAL_STATE })
+  }
+
   return (
     <OperationsContext.Provider
       value={{
@@ -91,6 +101,8 @@ export const OperationsProvider: FC<OperationsProviderProps> = ({ children }) =>
         getOperations,
         addOperation,
         setFilter,
+        resetState,
+        resetFilters,
       }}
     >
       {children}
