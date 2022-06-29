@@ -16,7 +16,7 @@ postgresql >= 14.2
 
 ### Instalación 🔧
 
-_El proyecto está compuesto de dos carpetas **client** y **server**_
+_El proyecto está compuesto de dos carpetas **server** y **client**_
 
 #### Para ejecutar el **servidor**:
 
