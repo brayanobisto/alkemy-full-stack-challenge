@@ -1,12 +1,13 @@
 import type { FC } from 'react'
-import { useMemo, useEffect } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 
 import { useOperations } from '@hooks'
-import { EditIcon, DeleteIcon } from '@components'
+import { EditIcon, DeleteIcon, ConfirmationModal } from '@components'
 
 export const OperationTable: FC = () => {
-  const { operations, filters, setFilter, resetFilters, openOperationModal } = useOperations()
-  // const [deleteOperationModalIsOpen, setDeleteOperationModalIsOpen] = useState(false)
+  const { operations, filters, setFilter, resetFilters, openOperationModal, deleteOperation } = useOperations()
+  const [deleteOperationModalIsOpen, setDeleteOperationModalIsOpen] = useState(false)
+  const [operationId, setOperationId] = useState<null | number>(null)
 
   useEffect(() => {
     return resetFilters
@@ -20,12 +21,24 @@ export const OperationTable: FC = () => {
     [operations, filters]
   )
 
+  const handleCloseDeleteOperationModal = () => {
+    setDeleteOperationModalIsOpen(false)
+    setOperationId(null)
+  }
+
+  const handleDeleteOperation = (id: number) => {
+    setOperationId(id)
+    setDeleteOperationModalIsOpen(true)
+  }
+
   if (operations.length === 0)
     return <h4 className="text-lg font-semibold text-center text-gray-400">No has registrado ninguna operación</h4>
 
   return (
     <div className="p-4">
-      {/* {deleteOperationModalIsOpen && <DeleteOperationModal onClose={deleteOperationModal} />} */}
+      {deleteOperationModalIsOpen && (
+        <ConfirmationModal onClose={handleCloseDeleteOperationModal} onConfirm={() => deleteOperation(operationId as number)} />
+      )}
       <div className="overflow-x-auto rounded-sm shadow-md">
         <table className="w-full text-sm">
           <thead className="text-xs uppercase bg-slate-200">
@@ -93,7 +106,7 @@ export const OperationTable: FC = () => {
                         <EditIcon className="fill-gray-800" />
                       </button>
 
-                      <button type="button">
+                      <button onClick={() => handleDeleteOperation(operation.id)} type="button">
                         <DeleteIcon className="fill-gray-800" />
                       </button>
                     </td>
