@@ -14,7 +14,7 @@ export const Home: FC = () => {
     [operations]
   )
 
-  const lastTenOperations = useMemo(() => operations.slice(0, 11).reverse(), [operations])
+  const lastTenOperations = useMemo(() => operations.slice(0, 11), [operations])
 
   if (user === undefined) return <FullScreenSpinner />
   if (user === null) return <Navigate to="/ingreso" replace />

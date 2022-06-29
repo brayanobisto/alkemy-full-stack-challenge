@@ -15,6 +15,8 @@ interface IOperationFilter {
 
 export interface IOperationsState {
   operations: IOperation[]
+  operation: null | IOperation
+  operationModalIsOpen: boolean
   filters: IOperationFilter
   isLoading: boolean
   error: string | null
@@ -22,6 +24,8 @@ export interface IOperationsState {
 
 const OPERATIONS_INITIAL_STATE: IOperationsState = {
   operations: [],
+  operation: null,
+  operationModalIsOpen: false,
   filters: {
     type: 'all',
     category: 'all',
@@ -32,7 +36,10 @@ const OPERATIONS_INITIAL_STATE: IOperationsState = {
 
 export interface IOperationsActions {
   getOperations: () => void
+  openOperationModal: (operation: null | IOperation) => void
+  closeOperationModal: () => void
   addOperation: (operation: IOperationForm) => void
+  updateOperation: (id: number, operation: IOperationForm) => void
   setFilter: (filter: string, value: string) => void
   resetFilters: () => void
   resetState: () => void
@@ -65,6 +72,14 @@ export const OperationsProvider: FC<OperationsProviderProps> = ({ children }) =>
     dispatch({ type: '@OPERATIONS/SET_OPERATIONS', payload: operations })
   }
 
+  const openOperationModal = (operation: null | IOperation): void => {
+    dispatch({ type: '@OPERATIONS/OPEN_OPERATION_MODAL', payload: operation })
+  }
+
+  const closeOperationModal = (): void => {
+    dispatch({ type: '@OPERATIONS/CLOSE_OPERATION_MODAL' })
+  }
+
   const addOperation = (operation: IOperationForm): void => {
     dispatch({ type: '@OPERATIONS/SET_IS_LOADING' })
 
@@ -79,6 +94,23 @@ export const OperationsProvider: FC<OperationsProviderProps> = ({ children }) =>
         const [error] = response.data.errors
         dispatch({ type: '@OPERATIONS/SET_ERROR', payload: error.msg })
         toast.error('No se pudo guardar la operación')
+      })
+  }
+
+  const updateOperation = (id: number, operation: IOperationForm): void => {
+    dispatch({ type: '@OPERATIONS/SET_IS_LOADING' })
+
+    operationsService
+      .updateOperation(id, operation)
+      .then(operation => {
+        dispatch({ type: '@OPERATIONS/UPDATE_OPERATION', payload: operation })
+        toast.success('Operación actualizada correctamente')
+      })
+      .catch(({ response }) => {
+        console.log(response)
+        const [error] = response.data.errors
+        dispatch({ type: '@OPERATIONS/SET_ERROR', payload: error.msg })
+        toast.error('No se pudo actualizar la operación')
       })
   }
 
@@ -99,7 +131,10 @@ export const OperationsProvider: FC<OperationsProviderProps> = ({ children }) =>
       value={{
         ...state,
         getOperations,
+        openOperationModal,
+        closeOperationModal,
         addOperation,
+        updateOperation,
         setFilter,
         resetState,
         resetFilters,

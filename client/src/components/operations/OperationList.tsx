@@ -13,7 +13,7 @@ export const OperationList: FC<Props> = ({ operations }) => {
 
   return (
     <div className="p-4">
-      <h2 className="mb-4 font-semibold">Últimos 10 movimientos</h2>
+      <h2 className="mb-4 font-semibold">Últimas 10 operaciones</h2>
 
       {/* Operation List */}
       <div className="grid grid-cols-1 gap-2">

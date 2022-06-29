@@ -5,44 +5,51 @@ import { yupResolver } from '@hookform/resolvers/yup'
 
 import { operationSchema } from '@schemas'
 import { useOperations } from '@hooks'
-import type { IOperationForm } from '@interfaces'
+import type { IOperation, IOperationForm } from '@interfaces'
+import { useEffect } from 'react'
 
 interface Props {
-  title: string
-  isOpen: boolean
+  operation: null | IOperation
   onClose: () => void
 }
 
-export const OperationModal: FC<Props> = ({ title, isOpen, onClose }) => {
-  const { addOperation } = useOperations()
+export const OperationModal: FC<Props> = ({ operation, onClose }) => {
+  const { addOperation, updateOperation } = useOperations()
+  const defaultValues = {
+    concept: '',
+    amount: '' as unknown as number,
+    date: '',
+    type: '',
+    category: '',
+  }
 
   const {
     register,
     reset,
+    getValues,
     handleSubmit,
     formState: { errors },
-  } = useForm<IOperationForm>({
-    defaultValues: {
-      concept: '',
-      amount: '' as unknown as number,
-      date: '',
-      type: '',
-      category: '',
-    },
+  } = useForm<IOperation | IOperationForm>({
+    defaultValues,
     resolver: yupResolver(operationSchema),
   })
 
+  useEffect(() => {
+    if (operation !== null) reset(operation)
+  }, [operation, reset])
+
   const handleClose = () => {
-    reset()
+    reset(defaultValues)
     onClose()
   }
 
   const onSubmit = (data: IOperationForm) => {
-    addOperation(data)
+    if (operation !== null) updateOperation(operation.id, data)
+    else addOperation(data)
     onClose()
   }
 
-  if (!isOpen) return null
+  if (operation !== null && JSON.stringify(defaultValues) === JSON.stringify(getValues())) return null
 
   return (
     // Overlay
@@ -54,7 +61,7 @@ export const OperationModal: FC<Props> = ({ title, isOpen, onClose }) => {
       >
         {/* Header */}
         <div className="pb-4 border-b border-b-gray-300">
-          <h3 className="text-xl font-medium">{title}</h3>
+          <h3 className="text-xl font-medium">{(operation !== null ? 'Actualizar' : 'Crear') + ' operación'}</h3>
         </div>
 
         <div className="mt-4">
@@ -106,12 +113,26 @@ export const OperationModal: FC<Props> = ({ title, isOpen, onClose }) => {
 
               <div className="flex items-center justify-between">
                 <label htmlFor="ingress" className="flex items-center gap-x-1">
-                  <input type="radio" {...register('type')} id="ingress" value="ingreso" className="w-5 h-5" />
+                  <input
+                    type="radio"
+                    {...register('type')}
+                    id="ingress"
+                    value="ingreso"
+                    disabled={operation !== null}
+                    className="w-5 h-5"
+                  />
                   Ingreso
                 </label>
 
                 <label htmlFor="egress" className="flex items-center gap-x-1">
-                  <input type="radio" {...register('type')} id="egress" value="egreso" className="w-5 h-5" />
+                  <input
+                    type="radio"
+                    {...register('type')}
+                    id="egress"
+                    value="egreso"
+                    disabled={operation !== null}
+                    className="w-5 h-5"
+                  />
                   Egreso
                 </label>
               </div>
@@ -149,7 +170,7 @@ export const OperationModal: FC<Props> = ({ title, isOpen, onClose }) => {
             form="operationModal"
             className="px-4 py-2 font-medium text-white transition-colors duration-200 ease-in bg-blue-600 rounded-lg hover:bg-blue-700 hover:text-gray-50"
           >
-            Guardar
+            {operation !== null ? 'Actualizar' : 'Crear'}
           </button>
         </div>
       </div>

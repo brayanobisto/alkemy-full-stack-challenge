@@ -5,7 +5,8 @@ import { useOperations } from '@hooks'
 import { EditIcon, DeleteIcon } from '@components'
 
 export const OperationTable: FC = () => {
-  const { operations, filters, setFilter, resetFilters } = useOperations()
+  const { operations, filters, setFilter, resetFilters, openOperationModal } = useOperations()
+  // const [deleteOperationModalIsOpen, setDeleteOperationModalIsOpen] = useState(false)
 
   useEffect(() => {
     return resetFilters
@@ -24,6 +25,7 @@ export const OperationTable: FC = () => {
 
   return (
     <div className="p-4">
+      {/* {deleteOperationModalIsOpen && <DeleteOperationModal onClose={deleteOperationModal} />} */}
       <div className="overflow-x-auto rounded-sm shadow-md">
         <table className="w-full text-sm">
           <thead className="text-xs uppercase bg-slate-200">
@@ -87,7 +89,7 @@ export const OperationTable: FC = () => {
                       {operation.category}
                     </td>
                     <td role="cell" className="flex items-center p-4 font-medium text-left whitespace-nowrap gap-x-4">
-                      <button type="button">
+                      <button onClick={() => openOperationModal(operation)} type="button">
                         <EditIcon className="fill-gray-800" />
                       </button>
 
