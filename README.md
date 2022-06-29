@@ -1,4 +1,6 @@
-# Full Stack Alkemy Challenge
+# Full Stack JS Alkemy Challenge
+
+_Esta es mi solución del challenge para la acelerarión Full Stack JS de [Alkemy](https://www.alkemy.org/)_
 
 ## Comenzando 🚀
 
