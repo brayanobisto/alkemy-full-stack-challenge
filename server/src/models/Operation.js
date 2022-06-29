@@ -26,6 +26,10 @@ module.exports = sequelize => {
             msg: 'La cantidad debe ser mayor a 0',
           },
         },
+        get: function () {
+          const rawValue = this.getDataValue('amount')
+          return parseFloat(rawValue)
+        },
       },
       date: {
         type: DataTypes.DATEONLY,
