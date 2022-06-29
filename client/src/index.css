@@ -6,3 +6,7 @@
   font-size: 16px;
   @apply text-gray-800;
 }
+
+option:checked {
+  display: none;
+}

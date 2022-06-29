@@ -3,12 +3,12 @@ import { useState } from 'react'
 
 import { Navigate } from 'react-router-dom'
 
-import { FullScreenSpinner, Navbar, OperationModal } from '@components'
+import { FullScreenSpinner, Navbar, OperationModal, OperationTable } from '@components'
 import { useAuth, useOperations } from '@hooks'
 
 export const Operations: FC = () => {
   const { user } = useAuth()
-  const { isLoading, operations } = useOperations()
+  const { isLoading } = useOperations()
   const [modalIsOpen, setModalIsOpen] = useState(false)
 
   if (isLoading || user === undefined) return <FullScreenSpinner />
@@ -26,15 +26,12 @@ export const Operations: FC = () => {
             onClick={() => setModalIsOpen(true)}
             className="px-4 py-2 font-medium text-white transition-colors duration-200 ease-in bg-blue-600 rounded-lg hover:bg-blue-700 hover:text-gray-50"
           >
-            Agregar
+            Añadir
           </button>
         </div>
 
-        <div className="flex flex-col mt-4">
-          {operations.map(operation => (
-            <div key={operation.id}>{operation.concept}</div>
-          ))}
-        </div>
+        {/* TODO: Add table */}
+        <OperationTable />
       </div>
     </div>
   )

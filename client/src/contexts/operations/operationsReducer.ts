@@ -4,6 +4,7 @@ import type { IOperation } from '@interfaces'
 type OperationsAction =
   | { type: '@OPERATIONS/SET'; payload: IOperation[] }
   | { type: '@OPERATIONS/ADD'; payload: IOperation }
+  | { type: '@OPERATIONS/SET_FILTER'; payload: { [key: string]: string } }
   | { type: '@OPERATIONS/SET_IS_LOADING' }
   | { type: '@OPERATIONS/SET_ERROR'; payload: string }
 
@@ -14,6 +15,9 @@ export const operationsReducer = (state: OperationsState, action: OperationsActi
 
     case '@OPERATIONS/ADD':
       return { ...state, operations: [...state.operations, action.payload], error: null, isLoading: false }
+
+    case '@OPERATIONS/SET_FILTER':
+      return { ...state, filters: { ...state.filters, ...action.payload } }
 
     case '@OPERATIONS/SET_IS_LOADING':
       return { ...state, isLoading: true }

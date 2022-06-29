@@ -8,14 +8,24 @@ import type { IOperation, IOperationForm } from '@interfaces'
 import { operationsService } from '@services'
 import { useAuth } from '@hooks'
 
+interface IOperationFilter {
+  type: string
+  category: string
+}
+
 export interface OperationsState {
   operations: IOperation[]
+  filters: IOperationFilter
   isLoading: boolean
   error: string | null
 }
 
 const OPERATIONS_INITIAL_STATE: OperationsState = {
   operations: [],
+  filters: {
+    type: 'all',
+    category: 'all',
+  },
   isLoading: false,
   error: null,
 }
@@ -23,6 +33,7 @@ const OPERATIONS_INITIAL_STATE: OperationsState = {
 export interface OperationsActions {
   getOperations: () => void
   addOperation: (operation: IOperationForm) => void
+  setFilter: (filter: string, value: string) => void
 }
 
 interface OperationsProviderProps {
@@ -69,12 +80,17 @@ export const OperationsProvider: FC<OperationsProviderProps> = ({ children }) =>
       })
   }
 
+  const setFilter = (filter: string, value: string): void => {
+    dispatch({ type: '@OPERATIONS/SET_FILTER', payload: { [filter]: value } })
+  }
+
   return (
     <OperationsContext.Provider
       value={{
         ...state,
         getOperations,
         addOperation,
+        setFilter,
       }}
     >
       {children}
