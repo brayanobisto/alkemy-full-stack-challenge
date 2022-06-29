@@ -6,8 +6,8 @@
   "license": "MIT",
   "private": true,
   "engines": {
-    "node": ">=16.0.0",
-    "yarn": ">=1.0.0",
+    "node": ">=16.15.1",
+    "yarn": ">=1.22.19",
     "npm": "please-use-yarn"
   },
   "scripts": {
