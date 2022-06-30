@@ -2,6 +2,8 @@
 
 _Esta es mi solución del challenge para la acelerarión Full Stack JS de [Alkemy](https://www.alkemy.org/)_
 
+_Live demo: [click aquí](https://alkemy-full-stack-challenge.vercel.app/)_
+
 ## Comenzando 🚀
 
 _Estas instrucciones te permitirán obtener una copia del proyecto en funcionamiento en tu máquina local para propósitos de desarrollo y pruebas._
